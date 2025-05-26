@@ -1,0 +1,72 @@
+// 1번
+use tutorial
+db.users.insert({username: "smith"})
+db.users.insert({username: "jones"})
+db.users.find()
+db.users.find({username: "smith"})
+
+// 2번
+db.users.find({username: "jones"})
+db.users.find({
+    $or : [
+        {username: "smith"},
+        {username: "jones"}
+    ]
+})
+
+// 3번
+db.users.updateOne({username: "smith"}, {$set: {country: "Canada"}})
+db.users.find({username: "smith"})
+
+// 4번
+db.users.replaceOne({username: "smith"}, {country: "Canada"})
+db.users.find({country: "Canada"})
+db.users.updateOne({country: "Canada"}, {$set: {username: "smith", country: "Canada"}})
+db.users.find({username: "smith"})
+
+// 5번
+db.users.updateOne({username: "smith"}, {$unset: {country: 1}})
+db.users.find({username: "smith"})
+
+// 6번
+show dbs
+show collections
+db.stats()
+db.users.stats()
+
+// 7번
+db.users.deleteOne({username: "smith"})
+db.users.find()
+db.users.deleteMany({})
+db.users.find()
+db.users.drop()
+
+// 쿼리 작성하기
+// 1번
+use test
+for(let i = 0; i < 20000; i++) {
+    db.product.insertOne({num: i, name: "스마트폰 " + i});
+}
+db.product.find()
+db.product.countDocuments()
+
+// 2번
+db.product.find().sort({num: -1})
+db.product.find().sort({num: -1}).limit(10)
+page_number = 6
+page_size = 10
+db.product.find().sort({num: -1})
+    .skip((page_number - 1) * page_size)
+    .limit(page_size)
+
+// 3번
+db.product.find({
+    $or : [
+        {num: {"$gt": 19995}},
+        {num: {"$lt": 15}}
+    ]
+})
+db.product.find({name: {"$in" : ["스마트폰 10", "스마트폰 100", "스마트폰 1000"]}})
+
+// 4번
+db.product.find({num: {"$lt": 5}}, {'name': 1, '_id': 0})
